@@ -60,9 +60,11 @@ public class PlaceServiceImpl implements IPlaceService {
     public DistanceResponse calculateDistance(
             double lat1, double lon1,
             double lat2, double lon2) {
-        Double distance = repository.calculateDistance(
+        Double distanceInMeters = repository.calculateDistance(
                 lon1, lat1, lon2, lat2);
-        return new DistanceResponse(distance);
+        Double distanceInKm = Math.round(distanceInMeters/1000 * 10000.0) / 10000.0;
+        distanceInMeters = Math.round(distanceInMeters * 10000.0) / 10000.0;
+        return new DistanceResponse(distanceInMeters, distanceInKm);
     }
 
     private GeoJsonFeature convertToFeature(Place place) {
@@ -79,7 +81,7 @@ public class PlaceServiceImpl implements IPlaceService {
                 "name", place.getName(),
                 "type", place.getType()
         );
-        return new GeoJsonFeature("Feature", geometry, properties);
+        return new GeoJsonFeature("Places", geometry, properties);
     }
 }
 

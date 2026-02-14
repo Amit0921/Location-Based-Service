@@ -9,14 +9,18 @@ springdoc:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/spatialdb
+#    url: jdbc:postgresql://localhost:5432/spatialdb
+    url: jdbc:postgresql://10.154.171.243:5432/spatialdb
     username: postgres
-    password: password
+    password: techlab
+
+    datasource:
+      hikari:
+        max-lifetime: 1800000
+
   jpa:
     hibernate:
       ddl-auto: validate
-    properties:
-      hibernate:
-        dialect: org.hibernate.spatial.dialect.postgis.PostgisDialect
     show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 

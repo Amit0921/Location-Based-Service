@@ -9,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GeoJsonFeatureCollection {
 
-    private String type = "FeatureCollection";
+    private String type = "PlaceCollection";
     private List<GeoJsonFeature> features;
 
     public GeoJsonFeatureCollection(List<GeoJsonFeature> features) {

@@ -8,7 +8,7 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 public class GeoJsonFeature {
-    private String type = "Feature";
+    private String type = "Places";
     private Object geometry;
     private Map<String, Object> properties;
 }

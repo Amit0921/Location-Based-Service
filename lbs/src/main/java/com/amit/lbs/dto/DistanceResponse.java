@@ -7,4 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class DistanceResponse {
     private Double distanceInMeters;
+    private Double distanceInKm;
 }
