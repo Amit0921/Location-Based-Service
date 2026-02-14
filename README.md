@@ -57,7 +57,7 @@ Create database Enable PostGIS and Create Tables:
 
     spring:
       datasource:
-        url: jdbc:postgresql://localhost:5432/lbs
+        url: jdbc:postgresql://localhost:5432/spatialdb
         username: postgres
         password: yourpassword
 
