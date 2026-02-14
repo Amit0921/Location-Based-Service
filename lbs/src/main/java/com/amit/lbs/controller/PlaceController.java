@@ -13,7 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/places")
+@RequestMapping("/places")
 @RequiredArgsConstructor
 @Validated
 public class PlaceController {
@@ -30,9 +30,9 @@ public class PlaceController {
 
     @GetMapping("/nearby")
     public GeoJsonFeatureCollection nearby(
-            @RequestParam double lat,
-            @RequestParam double lon,
-            @RequestParam double radius) {
+            @Validated @RequestParam double lat,
+            @Validated @RequestParam double lon,
+            @Validated @RequestParam double radius) {
 
         return placeService.findNearby(lat, lon, radius);
     }

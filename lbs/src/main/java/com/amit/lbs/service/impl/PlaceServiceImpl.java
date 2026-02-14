@@ -26,6 +26,8 @@ public class PlaceServiceImpl implements IPlaceService {
 
     public GeoJsonFeature createPlace(CreatePlaceRequest request) {
 
+        validateCoordinates(request.getLatitude(), request.getLongitude());
+
         Point point = geometryFactory.createPoint(
                 new Coordinate(request.getLongitude(), request.getLatitude())
         );
@@ -42,7 +44,18 @@ public class PlaceServiceImpl implements IPlaceService {
 
     public GeoJsonFeatureCollection findNearby(double lat, double lon, double radius) {
 
+        validateCoordinates(lat, lon);
+
+        if (radius <= 0) {
+            throw new IllegalArgumentException("Radius must be greater than 0");
+        }
+
         List<Place> places = repository.findNearby(lon, lat, radius);
+
+        if (places == null || places.isEmpty()) {
+            throw new ResourceNotFoundException("No places found within given radius");
+        }
+
         List<GeoJsonFeature> features = places.stream()
                 .map(this::convertToFeature)
                 .toList();
@@ -51,7 +64,10 @@ public class PlaceServiceImpl implements IPlaceService {
 
     public GeoJsonFeature findNearest(double lat, double lon) {
 
+        validateCoordinates(lat, lon);
+
         Place place = repository.findNearest(lon, lat);
+
         if (place == null)
             throw new ResourceNotFoundException("No nearby location found");
         return convertToFeature(place);
@@ -60,8 +76,16 @@ public class PlaceServiceImpl implements IPlaceService {
     public DistanceResponse calculateDistance(
             double lat1, double lon1,
             double lat2, double lon2) {
+
+        validateCoordinates(lat1, lon1);
+        validateCoordinates(lat2, lon2);
+
         Double distanceInMeters = repository.calculateDistance(
                 lon1, lat1, lon2, lat2);
+        if (distanceInMeters == null) {
+            throw new ResourceNotFoundException("Unable to calculate distance");
+        }
+
         Double distanceInKm = Math.round(distanceInMeters/1000 * 10000.0) / 10000.0;
         distanceInMeters = Math.round(distanceInMeters * 10000.0) / 10000.0;
         return new DistanceResponse(distanceInMeters, distanceInKm);
@@ -83,5 +107,15 @@ public class PlaceServiceImpl implements IPlaceService {
         );
         return new GeoJsonFeature("Places", geometry, properties);
     }
+
+    private void validateCoordinates(double lat, double lon) {
+        if (lat < -90 || lat > 90) {
+            throw new IllegalArgumentException("Latitude must be between -90 and 90");
+        }
+        if (lon < -180 || lon > 180) {
+            throw new IllegalArgumentException("Longitude must be between -180 and 180");
+        }
+    }
+
 }
 

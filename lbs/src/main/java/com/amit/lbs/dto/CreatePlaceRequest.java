@@ -1,5 +1,7 @@
 package com.amit.lbs.dto;
 
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -7,14 +9,19 @@ import lombok.Data;
 @Data
 public class CreatePlaceRequest {
 
-    @NotBlank
+    @NotBlank(message = "Name is required")
     private String name;
 
+    @NotBlank(message = "Type is required")
     private String type;
 
-    @NotNull
+    @NotNull(message = "Latitude is required")
+    @DecimalMin(value = "-90.0")
+    @DecimalMax(value = "90.0")
     private Double latitude;
 
-    @NotNull
+    @NotNull(message = "Longitude is required")
+    @DecimalMin(value = "-180.0")
+    @DecimalMax(value = "180.0")
     private Double longitude;
 }
