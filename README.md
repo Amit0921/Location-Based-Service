@@ -27,7 +27,7 @@ Built using:
 
 1️⃣ Clone Repository
 
-    git clone <repository-url>
+    git clone https://github.com/Amit0921/Location-Based-Service.git
     cd location-based-service
 
 2️⃣ Setup Database
